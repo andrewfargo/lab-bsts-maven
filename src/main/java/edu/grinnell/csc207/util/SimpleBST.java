@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.function.BiConsumer;
+import org.w3c.dom.Node;
 
 /**
  * A simple implementation of binary search trees.
@@ -74,7 +75,7 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
   // | SimpleMap methods |
   // +-------------------+
 
-  /**
+    /**
    * Set the value associated with key.
    *
    * @param key
@@ -87,9 +88,29 @@ public class SimpleBST<K, V> implements SimpleMap<K, V> {
    *
    * @throws NullPointerException if the key is null.
    */
-  @Override
   public V set(K key, V value) {
-    return null;        // STUB
+    if (key == null) {
+      throw new NullPointerException();
+    }
+    return this.set(key, value, this.root);
+  }
+
+
+  private V set(K key, V value, BSTNode<K,V> node) {
+    if (order.compare(node.key, key) == 0) {
+      this.cachedValue = node.value;
+      node.value = value;
+      return node.value;
+    } // if
+
+    BSTNode<K,V> ref = order.compare(node.key, key) > 0 ? node.right : node.left;
+
+    if (ref == null) {
+      ref = new BSTNode<K, V>(key, value);
+      return null;
+    } else {
+      return this.set(key, value, ref);
+    } // if/else
   } // set(K, V)
 
   /**
